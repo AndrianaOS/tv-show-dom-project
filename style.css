@@ -1,3 +1,43 @@
 #root {
   color: red;
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 2em;
+  border: 2px solid pink;
+  width: 92.5%;
+  padding: 1em;
+}
+
+.show-episodes {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.box {
+  border: 2px solid pink;
+  margin-bottom: 1em;
+  width: 17.5em;
+  height: 34em;
+}
+
+p {
+  padding: 1em;
+  margin-top: 0;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding: 0 1em 0 1em;
+}
+
+img {
+  padding: 1em;
+}
+
+#code {
+  text-align: center;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
