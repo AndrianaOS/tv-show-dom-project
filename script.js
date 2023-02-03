@@ -57,6 +57,7 @@ function select(episodes) {
   });
 }
 
+// FUNCTION TO DISPLAY EPISODES
 function displayEpisodes() {
   document.querySelector(".show-episodes").innerHTML = " ";
 
@@ -95,6 +96,7 @@ function displayEpisodes() {
   }
 }
 
+// SETUP TO SHOW PAGE
 function setup() {
   search();
 
