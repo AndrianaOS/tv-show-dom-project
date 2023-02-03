@@ -5,13 +5,14 @@
   align-items: center;
   margin: 2em;
   border: 2px solid pink;
-  width: 92.5%;
+  width: 86.5%;
   padding: 1em;
 }
 
 .show-episodes {
   display: grid;
   grid-template-columns: auto auto auto;
+  margin: 2em;
 }
 
 .box {
