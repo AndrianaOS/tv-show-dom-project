@@ -24,7 +24,10 @@ function search() {
   searchInput.addEventListener("keyup", (e) => {
     let value = e.target.value.toLowerCase();
     const filteredEpisodes = allEpisodes.filter((episode) => {
-      return episode.name.toLowerCase().includes(value);
+      return (
+        episode.name.toLowerCase().includes(value) ||
+        episode.summary.toLowerCase().includes(value)
+      );
     });
     displayEpisodes(filteredEpisodes);
     episodeNumber.innerText = `Displaying ${filteredEpisodes.length} / ${allEpisodes.length} episode(s)`;
@@ -58,10 +61,10 @@ function select(episodes) {
 }
 
 // FUNCTION TO DISPLAY EPISODES
-function displayEpisodes() {
+function displayEpisodes(episodeList) {
   document.querySelector(".show-episodes").innerHTML = " ";
 
-  for (let eachEpisode of allEpisodes) {
+  for (let eachEpisode of episodeList) {
     const episodeSection = document.createElement("section");
     episodeDiv.appendChild(episodeSection);
     episodeSection.setAttribute("class", "box");
