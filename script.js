@@ -17,28 +17,27 @@ const allEpisodes = getAllEpisodes();
 
 // FETCH FUNCTION FOR EPISODES
 
-async function fetchEpisodes() {
+async function setup() {
   try {
     const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
     const objectResponse = await response.json();
-    // console.log(objectResponse);
-    return objectResponse;
+    displayEpisodes(objectResponse);
+    search(objectResponse);
+    select(objectResponse);
   } catch (error) {
     console.log(error);
   }
 }
 
 //SEARCH INPUT FUNCTION
-async function search() {
-  const objectResponse = await fetchEpisodes();
-
+function search(episodes) {
   const searchInput = document.querySelector("#searchInput");
 
-  episodeNumber.innerText = `Displaying ${objectResponse.length} episode(s)`;
+  episodeNumber.innerText = `Displaying ${episodes.length} episode(s)`;
 
   searchInput.addEventListener("keyup", (e) => {
     let value = e.target.value.toLowerCase();
-    const filteredEpisodes = objectResponse.filter((episode) => {
+    const filteredEpisodes = episodes.filter((episode) => {
       return (
         episode.name.toLowerCase().includes(value) ||
         episode.summary.toLowerCase().includes(value)
@@ -51,12 +50,10 @@ async function search() {
 }
 
 // SELECT FUNCTION FOR DROPDOWN
-async function select() {
-  const objectResponse = await fetchEpisodes();
-
+function select(episodes) {
   const select = document.querySelector("#select");
 
-  objectResponse.forEach((eachEpisode) => {
+  for (let eachEpisode of episodes) {
     const option = document.createElement("option");
     select.appendChild(option);
 
@@ -69,22 +66,7 @@ async function select() {
     ).padStart(2, "0")}`;
 
     option.innerText = `${episodeCode} - ${eachEpisode.name}`;
-  });
-
-  // for (let eachEpisode of episodes) {
-  //   const option = document.createElement("option");
-  //   select.appendChild(option);
-
-  //   option.value = eachEpisode.id;
-
-  //   const episodeSeason = eachEpisode.season;
-  //   const episodeNumber = eachEpisode.number;
-  //   const episodeCode = `S${String(episodeSeason).padStart(2, "0")}: E${String(
-  //     episodeNumber
-  //   ).padStart(2, "0")}`;
-
-  //   option.innerText = `${episodeCode} - ${eachEpisode.name}`;
-  // }
+  }
 
   select.addEventListener("change", (event) => {
     const episodeId = event.target.value;
@@ -95,10 +77,10 @@ async function select() {
 
 // FUNCTION TO DISPLAY EPISODES
 
-async function displayEpisodes() {
+function displayEpisodes(episodeList) {
   document.querySelector(".show-episodes").innerHTML = " ";
-  const objectResponse = await fetchEpisodes();
-  objectResponse.forEach((eachEpisode) => {
+
+  for (let eachEpisode of episodeList) {
     const episodeSection = document.createElement("section");
     episodeDiv.appendChild(episodeSection);
     episodeSection.setAttribute("class", "box");
@@ -130,54 +112,17 @@ async function displayEpisodes() {
     episodeSummary.innerHTML = eachEpisode.summary;
 
     episodeSection.appendChild(episodeSummary);
-  });
+  }
 }
-
-// function displayEpisodes(episodeList) {
-//   document.querySelector(".show-episodes").innerHTML = " ";
-
-//   for (let eachEpisode of episodeList) {
-//     const episodeSection = document.createElement("section");
-//     episodeDiv.appendChild(episodeSection);
-//     episodeSection.setAttribute("class", "box");
-//     episodeSection.setAttribute("id", `episode-${eachEpisode.id}`);
-
-//     const episodeImage = document.createElement("img");
-//     episodeImage.src = eachEpisode.image.medium;
-//     episodeSection.appendChild(episodeImage);
-
-//     const episodeName = document.createElement("h2");
-//     episodeName.innerText = eachEpisode.name;
-//     episodeSection.appendChild(episodeName);
-
-//     const episodeSeason = eachEpisode.season;
-
-//     const episodeNumber = eachEpisode.number;
-
-//     const episodeCode = document.createElement("p");
-//     episodeCode.innerText = `S${String(episodeSeason).padStart(
-//       2,
-//       "0"
-//     )}: E${String(episodeNumber).padStart(2, "0")}`;
-//     episodeCode.setAttribute("id", "code");
-
-//     episodeSection.appendChild(episodeCode);
-
-//     const episodeSummary = document.createElement("p");
-
-//     episodeSummary.innerHTML = eachEpisode.summary;
-
-//     episodeSection.appendChild(episodeSummary);
-//   }
-// }
 
 // SETUP TO SHOW PAGE
-function setup() {
-  search();
+// async function setup() {
+//   fetchEpisodes();
+//   search();
 
-  displayEpisodes();
+//   displayEpisodes();
 
-  select();
-}
+//   select();
+// }
 
 window.onload = setup;
