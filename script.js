@@ -4,17 +4,27 @@ const episodeArea = document.querySelector("body");
 
 // VARIABLE FOR DIV
 const rootElem = document.querySelector("root");
+const title = document.querySelector("#title");
 
 // VARIABLE FOR DIV HOUSING EPISODE SECTIONS
 const episodeDiv = document.querySelector("#episodeDiv");
-// episodeDiv.setAttribute("class", "show-episodes");
 
 // DISPLAYING NUMBER OF EPISODES
 const episodeNumber = document.querySelector("#episodeNumber");
 
 let allEpisodes = getAllEpisodes();
-const allShows = getAllShows();
-const url = getURLId(82);
+
+function getURLId(id) {
+  return `https://api.tvmaze.com/shows/${id}/episodes`;
+}
+
+/**
+ * WHAT NEEDS TO BE DONE
+ * Fix showID bug to avoid showing GoT only
+ * Fix search episode option  as it only shows GoT episodes
+ * Make show dropdown show in alphabetical order
+ * Get page to display show title based on show selected
+ */
 
 // FETCH FUNCTION FOR EPISODES
 
@@ -33,14 +43,19 @@ const url = getURLId(82);
 // }
 
 async function setup() {
+  const allShows = getAllShows();
   selectShow(allShows);
+
   try {
+    const url = getURLId(82);
     const response = await fetch(url);
     const data = await response.json();
     allEpisodes = data;
     displayEpisodes(allEpisodes);
     search(allEpisodes);
-    select(allEpisodes);
+    createSelectDropdown(allEpisodes);
+    const showTitle = allShows.find((show) => show.id === 82);
+    title.innerText = showTitle.name;
   } catch (error) {
     console.log(error);
   }
@@ -52,7 +67,7 @@ function search(episodes) {
 
   episodeNumber.innerText = `Displaying ${episodes.length} episode(s)`;
 
-  searchInput.addEventListener("input", (e) => {
+  searchInput.oninput = (e) => {
     let value = e.target.value.toLowerCase();
     const filteredEpisodes = episodes.filter((episode) => {
       return (
@@ -63,13 +78,13 @@ function search(episodes) {
     console.log(filteredEpisodes);
     displayEpisodes(filteredEpisodes);
     episodeNumber.innerText = `Displaying ${filteredEpisodes.length} / ${episodes.length} episode(s)`;
-  });
+  };
 }
 
 // SELECT FUNCTION FOR DROPDOWN
-function select(episodes) {
+function createSelectDropdown(episodes) {
   const select = document.querySelector("#select");
-  // select.innerHTML = "";
+  select.innerHTML = "";
 
   for (let eachEpisode of episodes) {
     const option = document.createElement("option");
@@ -116,7 +131,7 @@ function displayEpisodes(episodeList) {
     episodeSection.setAttribute("id", `${eachEpisode.id}`);
 
     const episodeImage = document.createElement("img");
-    episodeImage.src = eachEpisode.image.medium;
+    episodeImage.src = eachEpisode.image ? eachEpisode.image.medium : "";
     episodeSection.appendChild(episodeImage);
 
     const episodeName = document.createElement("h2");
@@ -147,6 +162,8 @@ function displayEpisodes(episodeList) {
 //LEVEL 400 FOR DIFFERENT SHOWS
 
 function selectShow(shows) {
+  shows.sort((a, b) => (a.name > b.name ? 1 : -1));
+
   const select = document.querySelector("#selectShow");
 
   for (let eachShow of shows) {
@@ -156,9 +173,10 @@ function selectShow(shows) {
     option.value = eachShow.id;
     option.innerText = eachShow.name;
   }
+
   select.addEventListener("change", async (event) => {
     const showId = Number(event.target.value);
-    // console.log(showId);
+
     const fetchFromUrl = getURLId(showId);
     console.log(fetchFromUrl);
     try {
@@ -166,13 +184,13 @@ function selectShow(shows) {
       const data = await response.json();
       allEpisodes = data;
       displayEpisodes(allEpisodes);
+      createSelectDropdown(allEpisodes);
       search(allEpisodes);
-      select(allEpisodes);
+      const showTitle = shows.find((show) => show.id === showId);
+      title.innerText = showTitle.name;
     } catch (error) {
       console.log(error);
     }
-
-    // displayEpisodes(fetchFromUrl);
   });
 }
 
@@ -187,7 +205,3 @@ function selectShow(shows) {
 // }
 
 window.onload = setup;
-
-function getURLId(id) {
-  return `https://api.tvmaze.com/shows/${id}/episodes`;
-}
