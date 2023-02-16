@@ -11,31 +11,32 @@
   <body>
     <div id="root">
       <aside id="select-element">
-        <label for="select">Choose Show</label>
-        <select name="show-list" id="selectShow">
+        <!-- <label for="select"></label> -->
+        <select name="show-list" id="selectShow" class="searches">
           <option value="showList" selected>Show Display</option>
         </select>
       </aside>
 
       <aside id="select-element">
-        <label for="select">Choose Episode</label>
-        <select name="episode-list" id="select">
+        <!-- <label for="select">Choose Episode</label> -->
+        <select name="episode-list" id="select" class="searches">
           <option value="episodeList" selected>Episode Display</option>
         </select>
       </aside>
 
       <section id="search-section">
-        <input type="text" placeholder="Search episodes" id="searchInput" />
+        <input
+          type="text"
+          placeholder="Search episodes"
+          id="searchInput"
+          class="searches"
+        />
       </section>
       <aside id="episodeNumber">Displaying</aside>
     </div>
 
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script src="episodes.js"></script>
+    <div id="episodeDiv" class="show-episodes"></div>
 
-    <!-- Loads YOUR javascript code -->
-    <script src="script.js"></script>
-    <script src="shows.js"></script>
     <footer>
       <p>
         This data has (originally) come from
@@ -43,5 +44,12 @@
         tvmaze.com/api#licensing.
       </p>
     </footer>
+
+    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
+    <script src="episodes.js"></script>
+
+    <!-- Loads YOUR javascript code -->
+    <script src="shows.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
